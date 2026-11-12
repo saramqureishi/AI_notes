@@ -40,7 +40,7 @@
 | 4 | Probabilistic Inference (Bayes, Naive Bayes, Bayes nets) | ✅ Notes + labs + quiz |
 | 5 | Fuzzy Systems | ⚠️ **Quiz answered only.** Lecture/lab not yet in the repo |
 | 6 | Reading week | — |
-| 7 | Image Processing | ⏳ Not started |
+| 7 | Image Processing | ✅ Notes + labs done. ⚠️ **Quiz not yet pasted** |
 | 8 | Natural Language Processing | ⏳ Not started |
 | 9 | Large Language Models | ⏳ Not started |
 | 10 | Generative AI | ⏳ Not started |
@@ -111,6 +111,7 @@ Style rules:
 
 ## 7. Environment and technical gotchas (sandbox-specific)
 
+- Week 7: OpenCV must be **4.10.x** (`CascadeClassifier` is gone in 5.0); use `opencv-python-headless` (no libGL). Big model files live outside git in `$MODELS`.
 - `/root/.local` is **read-only** in the sandbox, so `pip install` fails there. Create a
   workspace venv (`python3 -m venv /projects/sandbox/venv`) and install into it.
 - Packages used: `pymupdf` (PDF text extraction), `simpleai` (Week 2 search), `deap` (Week 3 GA),
@@ -137,7 +138,8 @@ Style rules:
    the labs (likely `scikit-fuzzy`). Include a fully worked coursework/exam → pass-possibility
    example with fuzzification, min/max rule strengths, clipping, aggregation and a COG calculation
    by hand. The quiz is already answered in `STUDY_NOTES/Week5_QUIZ_with_answers.md`.
-2. Weeks 7–10 as they're released, using the same workflow.
+2. **Week 7 quiz:** when Sara pastes it, write `STUDY_NOTES/Week7_QUIZ_with_answers.md`.
+3. Weeks 8–10 as they're released, using the same workflow.
 3. Optional, high value: practise exam questions where she answers and the AI marks her
    answers (hand traces of UCS/A*, the GA bitstring, Bayes posteriors, fuzzy COG).
 
@@ -155,5 +157,6 @@ STUDY_NOTES/
   Week3_DETAILED_NOTES.md  + Week3_QUIZ_with_answers.md
   Week4_DETAILED_NOTES.md  + Week4_QUIZ_with_answers.md
   Week5_QUIZ_with_answers.md
-  week1/ week2/ week3/ week4/    <- runnable verified lab scripts
+  Week7_DETAILED_NOTES.md
+  week1/ week2/ week3/ week4/ week7/    <- runnable verified lab scripts
 ```

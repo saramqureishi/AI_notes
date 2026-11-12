@@ -10,6 +10,7 @@ If you're an AI assistant picking this up, read `../HANDOVER.md` first.
 | 3 | Genetic Algorithms | `Week3_DETAILED_NOTES.md` | `Week3_QUIZ_with_answers.md` | `week3/` |
 | 4 | Probabilistic Inference | `Week4_DETAILED_NOTES.md` | `Week4_QUIZ_with_answers.md` | `week4/` |
 | 5 | Fuzzy Systems | *pending (lecture not yet uploaded)* | `Week5_QUIZ_with_answers.md` | — |
+| 7 | Image Processing (Haar, YOLO, segmentation) | `Week7_DETAILED_NOTES.md` | *pending (quiz not yet pasted)* | `week7/` |
 
 ## Running the lab scripts
 ```
@@ -18,4 +19,6 @@ pip install simpleai deap scikit-learn pgmpy numpy matplotlib
 python week2/lab2_route.py
 python week3/lab3_tsp.py
 python week4/lab4_montyhall.py
+# week 7 needs MODELS=<folder with model files>, see Week7_DETAILED_NOTES.md section 10
+python week7/lab7_1_face_haar.py
 ```

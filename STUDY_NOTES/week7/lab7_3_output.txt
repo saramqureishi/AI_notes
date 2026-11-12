@@ -1,0 +1,45 @@
+=== Part A: YOLOv8m-seg instance segmentation ===
+
+bus: 6 instances   speed(ms) {'preprocess': 2.2, 'inference': 220.3, 'postprocess': 4.6}
+   #0 person     conf=0.93 mask area=  2.7% of image
+   #1 bus        conf=0.92 mask area= 30.0% of image
+   #2 person     conf=0.91 mask area=  6.0% of image
+   #3 person     conf=0.89 mask area=  4.1% of image
+   #4 person     conf=0.58 mask area=  1.3% of image
+   #5 tie        conf=0.29 mask area=  0.0% of image
+   instance view : {'person': 4, 'bus': 1, 'tie': 1}
+   semantic view : {'person': '1 region (merged)', 'bus': '1 region (merged)', 'tie': '1 region (merged)'} -> semantic output cannot tell how many of each (e.g. 4 separate persons -> one 'person' region)
+   overlapping pixels between different person masks: 316
+
+zidane: 5 instances   speed(ms) {'preprocess': 1.4, 'inference': 187.8, 'postprocess': 2.3}
+   #0 person     conf=0.92 mask area= 23.4% of image
+   #1 person     conf=0.92 mask area= 16.5% of image
+   #2 tie        conf=0.85 mask area=  1.1% of image
+   #3 tie        conf=0.31 mask area=  0.9% of image
+   #4 person     conf=0.26 mask area=  4.8% of image
+   instance view : {'person': 3, 'tie': 2}
+   semantic view : {'person': '1 region (merged)', 'tie': '1 region (merged)'} -> semantic output cannot tell how many of each (e.g. 3 separate persons -> one 'person' region)
+   overlapping pixels between different person masks: 2495
+
+cat: 1 instances   speed(ms) {'preprocess': 1.2, 'inference': 198.2, 'postprocess': 1.4}
+   #0 cat        conf=0.94 mask area= 73.2% of image
+   instance view : {'cat': 1}
+   semantic view : {'cat': '1 region (merged)'} -> counts lost
+
+coffee: 3 instances   speed(ms) {'preprocess': 0.9, 'inference': 179.7, 'postprocess': 2.3}
+   #0 cup        conf=0.97 mask area= 20.6% of image
+   #1 spoon      conf=0.84 mask area=  3.2% of image
+   #2 dining table conf=0.75 mask area= 65.9% of image
+   instance view : {'cup': 1, 'spoon': 1, 'dining table': 1}
+   semantic view : {'cup': '1 region (merged)', 'spoon': '1 region (merged)', 'dining table': '1 region (merged)'} -> counts lost
+
+=== Part B: classical segmentation (grey-level / colour / region growing) ===
+Otsu threshold T=107; foreground fraction=0.39; connected components=96 (true coins=24)
+adaptive threshold components=755
+k-means colour clustering k=2: segment sizes % = [52.8, 47.2] compactness=1.1e+09
+k-means colour clustering k=3: segment sizes % = [54.9, 22.6, 22.4] compactness=5.25e+08
+k-means colour clustering k=5: segment sizes % = [28.3, 26.7, 20.0, 17.1, 7.9] compactness=2.06e+08
+region growing seed=(45,80) grey=105 tol= 5: region =   3.8% of image
+region growing seed=(45,80) grey=105 tol=15: region =  11.7% of image
+region growing seed=(45,80) grey=105 tol=30: region =  24.8% of image
+region growing seed=(45,80) grey=105 tol=60: region =  67.0% of image

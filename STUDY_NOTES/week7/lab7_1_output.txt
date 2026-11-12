@@ -1,0 +1,65 @@
+=== Task 1: lab default  detectMultiScale(gray, minNeighbors=5) ===
+zidane (2 frontal faces)         size=1280x720  faces=2    76.1 ms  boxes=[(917, 109, 152, 152), (44, 328, 195, 195)]
+bus (many people, small)         size=810x1080  faces=2   135.9 ms  boxes=[(118, 420, 47, 47), (262, 422, 58, 58)]
+astronaut (1 frontal)            size=512x512  faces=1    31.6 ms  boxes=[(177, 66, 95, 95)]
+cat (animal face)                size=451x300  faces=0    25.6 ms  boxes=[]
+coffee (NO face)                 size=600x400  faces=0    22.9 ms  boxes=[]
+camera (man, side/back view)     size=512x512  faces=0    27.6 ms  boxes=[]
+
+=== Task 2: varying conditions on the astronaut (true faces = 1) ===
+original                 faces=1  [(177, 66, 95, 95)]
+dark (gamma 3)           faces=1  [(173, 64, 102, 102)]
+very dark (gamma 6)      faces=2  [(170, 61, 108, 108), (49, 227, 91, 91)]
+over-bright (gamma .3)   faces=1  [(176, 66, 97, 97)]
+blurred (k=25)           faces=1  [(174, 66, 98, 98)]
+rotated 15 deg           faces=1  [(135, 74, 107, 107)]
+rotated 30 deg           faces=0  []
+rotated 45 deg           faces=1  [(126, 189, 58, 58)]
+upside down              faces=1  [(122, 254, 90, 90)]
+mirror (flip)            faces=2  [(238, 65, 98, 98), (66, 433, 26, 26)]
+tiny (64px wide)         faces=0  []
+face partly occluded     faces=0  []
+
+=== Task 3: parameter sweep (zidane = 2 true faces / coffee = 0 true faces / bus = small people) ===
+minNeighbors  scaleFactor | zidane  coffee  bus
+           0         1.05 |    188       9  100
+           1         1.05 |      9       2    8
+           3         1.05 |      3       0    4
+           5         1.05 |      3       0    3
+           8         1.05 |      2       0    2
+           0         1.10 |     89       2   45
+           1         1.10 |      4       0    5
+           3         1.10 |      2       0    2
+           5         1.10 |      2       0    2
+           8         1.10 |      2       0    1
+           0         1.30 |     28       1   25
+           1         1.30 |      2       0    3
+           3         1.30 |      2       0    1
+           5         1.30 |      1       0    1
+           8         1.30 |      1       0    0
+lab's commented variant (scaleFactor=1.2,minSize=50): 1 faces
+
+=== Task 4: quantitative test on LFW subset (24x24-ish cropped faces) + non-face images ===
+LFW subset: faces detected 97/100 (recall 97%)   non-face patches flagged 0/100 (false-positive rate 0%)
+
+=== Task 5: what is inside haarcascade_frontalface_default.xml ===
+window size: 24 x 24
+number of stages: 25  total weak classifiers (features): 2913
+weak classifiers per stage: [9, 16, 27, 32, 52, 53, 62, 72, 83, 91, 99, 115, 127, 135, 136, 137, 159, 155, 169, 196, 197, 181, 199, 211, 200]
+first 3 stages: [9, 16, 27] -> stage 1 needs only 9 feature tests; later stages are far bigger (last = 200 )
+distinct Haar features (rectangles) stored: 2913
+
+=== Integral image demo ===
+image:
+ [[ 1  2  3  4]
+ [ 5  6  7  8]
+ [ 9 10 11 12]
+ [13 14 15 16]] 
+integral image (padded):
+ [[  0   0   0   0   0]
+ [  0   1   3   6  10]
+ [  0   6  14  24  36]
+ [  0  15  33  54  78]
+ [  0  28  60  96 136]]
+sum rows1-2/cols1-2 via 4 look-ups:  34  (direct: 34 )
+2-rect Haar feature on rows0-1: left 14 - right 22 = -8

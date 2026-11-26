@@ -1,0 +1,46 @@
+=== Task: default settings (confidence 0.5, NMS 0.3) full vs tiny ===
+bus                    full     913 ms  raw boxes= 25 after NMS= 5  {'person': 4, 'bus': 1}  top conf=1.00
+bus                    tiny     148 ms  raw boxes=  3 after NMS= 3  {'person': 3}  top conf=0.98
+zidane                 full     191 ms  raw boxes=  9 after NMS= 2  {'person': 2}  top conf=1.00
+zidane                 tiny      25 ms  raw boxes=  0 after NMS= 0  {}  top conf=0.00
+cat                    full     178 ms  raw boxes=  5 after NMS= 1  {'cat': 1}  top conf=0.99
+cat                    tiny      33 ms  raw boxes=  0 after NMS= 0  {}  top conf=0.00
+coffee                 full     186 ms  raw boxes= 13 after NMS= 2  {'cup': 1, 'spoon': 1}  top conf=0.99
+coffee                 tiny      27 ms  raw boxes=  0 after NMS= 0  {}  top conf=0.00
+rocket                 full     180 ms  raw boxes=  0 after NMS= 0  {}  top conf=0.00
+rocket                 tiny      26 ms  raw boxes=  0 after NMS= 0  {}  top conf=0.00
+horse(bw silhouette)   full     196 ms  raw boxes=  7 after NMS= 1  {'horse': 1}  top conf=0.98
+horse(bw silhouette)   tiny      25 ms  raw boxes=  0 after NMS= 0  {}  top conf=0.00
+total time: full 1844 ms  vs tiny 284 ms  (tiny ~6.5x faster)
+
+=== Task: effect of confidence / NMS thresholds on bus.jpg (full model) ===
+confidence=0.9  nms=0.3  raw= 15 kept=  4  {'person': 3, 'bus': 1}
+confidence=0.5  nms=0.3  raw= 25 kept=  5  {'person': 4, 'bus': 1}
+confidence=0.25 nms=0.3  raw= 31 kept=  6  {'person': 4, 'bus': 1, 'handbag': 1}
+confidence=0.25 nms=0.2  raw= 31 kept=  6  {'person': 4, 'bus': 1, 'handbag': 1}
+confidence=0.25 nms=0.9  raw= 31 kept= 28  {'person': 20, 'bus': 7, 'handbag': 1}
+confidence=0.05 nms=0.3  raw= 34 kept=  6  {'person': 4, 'bus': 1, 'handbag': 1}
+
+=== Task: per-box detail, bus.jpg, full vs tiny ===
+  full person       1.00 box(x,y,w,h)=[48, 400, 167, 505]
+  full person       1.00 box(x,y,w,h)=[682, 398, 123, 479]
+  full person       1.00 box(x,y,w,h)=[226, 413, 119, 442]
+  full bus          0.99 box(x,y,w,h)=[18, 187, 785, 578]
+  full person       0.83 box(x,y,w,h)=[1, 472, 72, 429]
+  tiny person       0.98 box(x,y,w,h)=[41, 385, 181, 530]
+  tiny person       0.96 box(x,y,w,h)=[222, 397, 128, 450]
+  tiny person       0.70 box(x,y,w,h)=[704, 357, 97, 521]
+
+=== Task: can lowering the threshold rescue YOLOv3-tiny? ===
+zidane                 tiny confidence=0.5  -> []
+zidane                 tiny confidence=0.3  -> [('person', 0.33)]
+zidane                 tiny confidence=0.15 -> [('person', 0.33), ('person', 0.25)]
+cat                    tiny confidence=0.5  -> []
+cat                    tiny confidence=0.3  -> []
+cat                    tiny confidence=0.15 -> []
+coffee                 tiny confidence=0.5  -> []
+coffee                 tiny confidence=0.3  -> [('toilet', 0.42)]
+coffee                 tiny confidence=0.15 -> [('toilet', 0.42)]
+horse(bw silhouette)   tiny confidence=0.5  -> []
+horse(bw silhouette)   tiny confidence=0.3  -> []
+horse(bw silhouette)   tiny confidence=0.15 -> []

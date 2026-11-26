@@ -414,7 +414,7 @@ Without the history, "What MSc programmes do **they** offer?" has no referent.
 - Related challenges: keeping the **system prompt/persona** in force over long chats; **hallucination**; safety.
 
 ### 7.4 Your lab run (Gemma-3-1B-it)
-- Turn 1: "how much do you know about Brunel University?" → fluent but contains **errors**: "situated in Bath, Somerset, close to Stonehenge" (**false**: Brunel University London is in Uxbridge, west London) and "founded in 1876".
+- Turn 1: "how much do you know about Brunel University?" → fluent but contains **errors**: "situated in Bath, Somerset, close to Stonehenge" (**false**: Brunel University London is in Uxbridge, west London) and "founded in 1876" (this date does not match Brunel's own history page: university status 1966, roots in 1798/1789 depending on the source; see References).
   A 1B-parameter model has weak **world knowledge** (lecture slide 8: linguistic knowledge is easy, world knowledge is much harder).
 - Turn 2: "do they have a computer science department?" → answered **about Brunel** although "Brunel" was not repeated: **history worked**.
 - Turn 3: "what Msc programmes do they offer?" → again resolved "they"; listed programmes and gave a URL it could not have verified.
@@ -434,6 +434,86 @@ Rule: choose small for prototypes, offline or private use; larger for answers th
 - [ ] LLM stateless; history re-sent each turn.  - [ ] Roles: system/user/assistant list; loop and append both sides.  - [ ] Tokenizer/model/pipeline; system prompt.
 - [ ] Core challenge = **context window / memory management** (truncate, summarise, retrieve) with cost growth.  - [ ] Hallucination/quality trade-off for small models.
 **Common mistakes:** saying the model "remembers" between calls; giving only the code loop without naming the challenge.
+
+---
+
+## References (where each answer came from)
+
+**How to read this.** "Slide n" = slide number in `Lecture W9 Large Language Models.pdf` (55 slides). "p. n" = **PDF page** of the file in the repo (not the printed page number).
+"Cell n" = cell index in the notebook. Everything in the repo is in `saramqureishi/AI_notes`.
+
+### Course materials (repo files)
+| Short name | File | Used for |
+|---|---|---|
+| **Seminar** | `Seminar W9 Large Language Models.pdf` (p. 1) | The 7 questions |
+| **Lecture** | `Lecture W9 Large Language Models.pdf` | Slide numbers below |
+| **Lab** | `Lab W9 Large Language Models.pdf` (7 pp.) | Task 9.1 pp. 2–4, Task 9.2 pp. 4–5, Task 9.3 pp. 6–7 |
+| **NB-Layer / NB-Chat / NB-Summ** | `LLM_LayerDynamics2026.ipynb`, `LLM_ChatBot2026.ipynb`, `LLM_Summarisation2026.ipynb` | Your saved Colab outputs |
+
+### Papers (repo files)
+| Short name | Full reference |
+|---|---|
+| **Vaswani 2017** | Vaswani et al., *Attention Is All You Need*, NeurIPS 2017 (`Vaswani 2017 - Attention Is All You Need.pdf`) |
+| **Merullo 2023** | Merullo, Eickhoff, Pavlick, *Language Models Implement Simple Word2Vec-style Vector Arithmetic*, arXiv:2305.16130 |
+| **Bsharat 2023** | Bsharat, Myrzakhan, Shen, *Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4*, arXiv:2312.16171 |
+| **Hu 2021** | Hu et al., *LoRA: Low-Rank Adaptation of Large Language Models*, arXiv:2106.09685 |
+| **Ziegler 2020** | Ziegler et al., *Fine-Tuning Language Models from Human Preferences*, arXiv:1909.08593 |
+| **nostalgebraist** | *Interpreting GPT: the logit lens* (cited on Lecture slide 21): https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens |
+
+### Per question
+
+**Q1 Transformer**
+- "Based solely on attention, dispensing with recurrence and convolutions"; 28.4 BLEU, 41.8 BLEU, 3.5 days on 8 GPUs: Vaswani p. 1. Recurrent models cannot parallelise within examples: p. 2.
+- N = 6 encoder/decoder layers, residual + layer norm: p. 3. Scaled dot-product formula and the footnote that q·k has variance d_k: p. 4. h = 8, d_k = 64, d_model = 512; decoder masking with −∞: p. 5.
+  Table 1 (sequential operations O(1) vs O(n), path length, O(n²·d) vs O(n·d²)) and sinusoidal positional encoding: p. 6.
+- Attention matrix, multi-head (dog/cat/bark/park), "bank" example, next-token prediction, 10–35 trillion tokens: Lecture slides 10–19.
+- **My own work:** the 3-token numeric example, the √d_k simulation (2.0 / 8.0 / 22.5), and the n = 1000, d = 512 cost comparison (512 M vs 262 M) were calculated by me in Python from the paper's formulas; they are not in the paper.
+
+**Q2 Logit lens and stages**
+- Logit lens definition and bullet findings: Lecture slide 21 (citing nostalgebraist). Three stages A/B/C: Lecture slide 22.
+- Stage descriptions, FFN adds an update vector o, saturation, "about 2/3rds of the way", nine tasks, `Poland → Warsaw`, `China → Beijing` patching: Merullo pp. 1, 3–4 (Section 3 and the introduction).
+  Saturation is attributed there to Geva et al. (2022a).
+- Code and per-layer output (16 layers, "London" first at layer 10–11, 0.62351 at layer 16): Lab pp. 6–7 and NB-Layer cell 2. The lab text itself describes the layers as "replicated the token ... ('is'), changed the tense ('was'), then confused 'capital' with 'currency/capitals', and finally figured out 'London' from Layer 11".
+- **My own work:** 11/16 = 69% depth; the caveats (near-uniform probabilities, no visible "England" argument stage, lens is approximate); my readings of layers 8–9 are guesses. The ~128k vocabulary size is general knowledge about Llama-3 tokenizers, not from the course files.
+
+**Q3 Prompting**
+- Poor vs good prompt example, system vs user prompt, rumoured ChatGPT system prompt: Lecture slides 33–38.
+- 26 principles in 5 categories, the +57.7% quality / +36.4% correctness figures, GPT-4 and LLaMA-1/2 tests: Bsharat p. 1 (abstract), p. 3 (+57.7% / 36.4%).
+  The principle list and their numbers: Table 2, p. 6. The six design aims: p. 7.
+- The worked prompt example (role + audience + constraints + output primer) is **my own** illustration built from principles 2, 16, 17, 20, 25 and your Lab 9.1 prompts (Lab p. 3–4).
+
+**Q4 LoRA**
+- Idea of instruction fine-tuning from a small labelled set, "close to pre-train", LoRA slides, need for open models (Llama): Lecture slides 40–43, 47–49.
+- 10,000× fewer trainable parameters, 3× less GPU memory, on par or better than full fine-tuning, no extra inference latency: Hu p. 1 (abstract).
+  Trainable parameters as small as 0.01%: p. 3. Adapter layers add latency, batch size as small as one: p. 3.
+  `W₀ + ΔW = W₀ + BA`, `h = W₀x + BAx`, B in R^{d×r}, A in R^{r×k}, A Gaussian / B zero init, α/r scaling, low "intrinsic rank": pp. 3–4.
+  VRAM 1.2 TB → 350 GB; checkpoint 350 GB → 35 MB with r = 4 on W_q, W_v; swapping LoRA weights per task: p. 5. "18M parameters, about 35 MB": p. 10.
+- **My own work:** the 4096×4096, r = 8 calculation (16,777,216 vs 65,536 = 0.39%, 256× fewer), the 4×4 toy picture, and the GPT-3 count 2 × 192 × 12288 × 4 = 18.9 M
+  (the formula |Θ| = 2 × L × d_model × r is from the paper, p. 6–7; the 96 layers and d_model = 12288 values for GPT-3 175B are standard published figures I supplied, not quoted from this paper's text).
+
+**Q5 RLHF**
+- Reinforcement learning vs supervised, human feedback, reward model, KL divergence ("model drift, stability, quality"), fine-tuning vs RLHF table: Lecture slides 50–54.
+- Four-option human choice, reward-model loss (Eq. 1), modified reward `R = r − β log(π/ρ)` (Eq. 2), reasons for the KL term, 4-step training process, PPO: Ziegler p. 3.
+  774M-parameter GPT-2: p. 3. 5,000 comparisons (style) and 60,000 (summarisation), copying of whole sentences: pp. 1–2. Humans inconsistent on absolute scores, comparisons almost as useful (footnote 1): p. 3.
+- **My own work:** the numeric loss example (scores [1.2, 0.3, −0.5, 0.0] → P = 0.529, loss 0.637), the penalty table for β = 0.1 (1.78 / 1.54), and the KL(p‖q) = 0.184 illustration are calculated by me; the numbers are made up for illustration.
+
+**Q6 Summarisation**
+- Extractive vs abstractive, API setup steps, `genai.Client`, `gemini-2.5-flash`, `generate_content`, the three prompts, and the report requirements: Lab pp. 2–4 and NB-Summ cells 0–4.
+- Word counts (192, 117, 56) and the three summaries: NB-Summ cell 4 output.
+- **My own work:** the accuracy table compares those summaries line by line with the BBC article text stored in `input_text` in NB-Summ cell 3 (the article: "Households face 'dismal' rise in spending power, says IFS", BBC News, 27 Nov 2025).
+  The chunk-and-merge idea for very long texts and the evaluation rubric are standard practice that I added; they are not in the lecture. ROUGE is mentioned as outside the module.
+
+**Q7 Chatbot**
+- Statelessness / history re-sent each turn, system prompt, `messages` list, loop, `pipeline("text-generation")`, requirements 1–4: Lab pp. 4–5 and NB-Chat cells 2–4. The earlier single-prompt `get_llm_reply` (no memory): NB-Chat cell 3.
+- Linguistic vs world knowledge: Lecture slide 8. Gemma-3-1B transcript (Bath/Somerset, 1876, follow-up questions): NB-Chat cell 4 output.
+- **My own work:** the context-growth arithmetic (200 tokens per turn → 42,000 total over 20 turns vs 4,000), the truncate/summarise/retrieve strategies, and the small-vs-large trade-off table.
+- **External fact-check:** Brunel University London is in the Uxbridge area of London; it became a university in June 1966; its history page traces roots to 1789/1798 (Borough Road College). So "Bath, Somerset" is wrong, and "1876" matches none of these dates.
+  Sources: https://en.wikipedia.org/wiki/Brunel_University_of_London and https://www.brunel.ac.uk/life/library/ArchivesAndSpecialCollections/CelebratingBrunelExhibition .
+  (Content paraphrased; the claim "oldest universities in the UK" in the bot's answer was not separately checked.)
+
+### Not from a source (flagged)
+- The "common mistakes" lines and the mark-scheme checklists are my judgement of what an examiner would look for, based on the seminar wording and the content above. They are **not** an official mark scheme.
+- I could not re-run the three labs (no Gemini key; Gemma and Llama are gated). All lab numbers come from your saved notebook outputs.
 
 ---
 
